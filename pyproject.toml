@@ -49,14 +49,12 @@ line-length = 88
 target-version = "py39"
 
 [tool.ruff.lint]
-select = ["ALL"]
+select = ["E", "W", "F", "UP", "C", "T", "PYI", "PT", "Q", "I"]
 ignore = ["E402", "E501", "E711", "C901", "UP037"]
-fixable = ["ALL"]
 
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-line-ending = "lf"
+
+[tool.ruff.lint.isort]
+detect-same-package = true
 
 [build-system]
 requires = ["poetry-core>=1.6.0"]
