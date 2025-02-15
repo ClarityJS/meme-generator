@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from PIL.Image import Image as IMG
 from pil_utils import BuildImage
 
 from meme_generator import add_meme

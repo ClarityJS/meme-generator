@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  更新资源列表:
+  update_resource_list:
     runs-on: ubuntu-latest
     steps:
       - name: 检出仓库代码
@@ -33,7 +33,7 @@ jobs:
           message: "更新 resource_list.json"
           branch: "main"
 
-  更新 Wiki:
+  update_wiki:
     runs-on: ubuntu-latest
     steps:
       - name: 检出仓库代码

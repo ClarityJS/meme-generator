@@ -1,7 +1,5 @@
 from pathlib import Path
-from typing import List
 
-from PIL.Image import Image as IMG
 from pil_utils import BuildImage
 
 from meme_generator import add_meme
@@ -32,7 +30,7 @@ def ming_ku(images: list[BuildImage], texts: list[str], args):
                 texts[i],
                 allow_wrap=True,
                 lines_align="center",
-                fontsize=30,
+                font_size=30,
                 fill=(0, 0, 0),
             )
 

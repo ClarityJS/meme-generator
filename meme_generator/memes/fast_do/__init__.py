@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 from PIL.Image import Image as IMG
 from pil_utils import BuildImage

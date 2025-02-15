@@ -1,6 +1,5 @@
 import random
 from pathlib import Path
-from typing import List
 
 from pil_utils import BuildImage
 from pydantic import Field
