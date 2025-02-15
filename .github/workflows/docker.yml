@@ -75,7 +75,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
       - name: Save Docker Buildx cache
-        uses: reproducible-containers/buildkit-cache-dance@v2
+        uses: reproducible-containers/buildkit-cache-dance@v3
         with:
           key: docker-buildx-cache
           paths: /tmp/.buildx-cache

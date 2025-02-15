@@ -9,5 +9,6 @@ repos:
     rev: v0.9.6
     hooks:
       - id: ruff
-        args: [--fix]
+        args: [--fix, --exit-non-zero-on-fix]
+        stages: [pre-commit]
       - id: ruff-format
