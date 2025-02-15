@@ -12,3 +12,4 @@ repos:
         args: [--fix]
         stages: [pre-commit]
       - id: ruff-format
+        args: [--fix]
