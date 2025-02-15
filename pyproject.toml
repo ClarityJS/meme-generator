@@ -2,15 +2,13 @@
 name = "meme-generator"
 version = "0.1.0"
 description = "Python package for making fun pictures"
-authors = ["ClarityJS <3369906077@qq.com>","meetwq <meetwq@gmail.com>"]
+authors = ["ClarityJS <3369906077@qq.com>", "meetwq <meetwq@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/ClarityJS/meme-generator"
 repository = "https://github.com/ClarityJS/meme-generator"
 exclude = [
-    "meme_generator/memes/**/*.jpg",
-    "meme_generator/memes/**/*.png",
-    "meme_generator/memes/**/*.gif",
+    "meme_generator/memes/*.{jpg,png,gif}"
 ]
 
 [tool.poetry.dependencies]
@@ -32,6 +30,12 @@ arclet-alconna = "^1.8.23,!=1.8.27"
 arclet-alconna-tools = "^0.7.9"
 
 [tool.poetry.group.dev.dependencies]
+pre-commit = "^3.5.0"
+pytest = "^7.4.0"
+mypy = "^1.5.1"
+flake8 = "^6.1.0"
+black = "^23.12.1"
+isort = "^5.12.0"
 
 [tool.poetry.scripts]
 meme = "meme_generator.cli:main"
@@ -39,21 +43,11 @@ meme = "meme_generator.cli:main"
 [tool.pyright]
 pythonVersion = "3.9"
 pythonPlatform = "All"
-typeCheckingMode = "basic"
+typeCheckingMode = "strict"
+reportMissingImports = true
+reportMissingTypeStubs = false
 defineConstant = { PYDANTIC_V2 = true }
 
-[tool.ruff]
-line-length = 88
-target-version = "py39"
-
-[tool.ruff.lint]
-select = ["E", "W", "F", "UP", "C", "T", "PYI", "PT", "Q", "I"]
-ignore = ["E402", "E501", "E711", "C901", "UP037"]
-fixable = ["ALL"]
-
-[tool.ruff.lint.isort]
-detect-same-package = true
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.6.0"]
 build-backend = "poetry.core.masonry.api"
