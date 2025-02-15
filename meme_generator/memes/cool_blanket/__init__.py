@@ -1,7 +1,9 @@
 from pathlib import Path
-from meme_generator import add_meme
-from meme_generator.exception import TextOverLength, ImageNumberMismatch
+
 from pil_utils import BuildImage
+
+from meme_generator import add_meme
+from meme_generator.exception import ImageNumberMismatch, TextOverLength
 
 img_dir = Path(__file__).parent / "images"
 
@@ -10,10 +12,7 @@ def cool_blanket(images: list[BuildImage], texts: list[str], args):
     frame = BuildImage.open(img_dir / "0.png")
     try:
         frame.paste(
-            images[0]
-            .convert("RGBA")
-            .resize((600, 600), keep_ratio=True)
-            .circle(),
+            images[0].convert("RGBA").resize((600, 600), keep_ratio=True).circle(),
             (120, 150),
             below=True,
         )

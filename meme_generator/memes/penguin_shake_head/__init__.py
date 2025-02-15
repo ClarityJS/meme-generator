@@ -1,5 +1,7 @@
 from pathlib import Path
+
 from pil_utils import BuildImage
+
 from meme_generator import add_meme
 from meme_generator.utils import (
     FrameAlignPolicy,
@@ -11,7 +13,6 @@ img_dir = Path(__file__).parent / "images"
 
 
 def penguin_shake_head(images: list[BuildImage], texts, args):
-
     base_loc = (78, 40)
     offsets = {
         0: (0, 0),
@@ -50,10 +51,7 @@ def penguin_shake_head(images: list[BuildImage], texts, args):
     def maker(i: int) -> Maker:
         def make(imgs: list[BuildImage]) -> BuildImage:
             user_head = (
-                imgs[0]
-                .convert("RGBA")
-                .resize((130, 150), keep_ratio=True)
-                .circle()
+                imgs[0].convert("RGBA").resize((130, 150), keep_ratio=True).circle()
             )
 
             frame = BuildImage.open(img_dir / f"{i}.png").convert("RGBA")

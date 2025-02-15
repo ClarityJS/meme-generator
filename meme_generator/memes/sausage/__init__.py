@@ -1,8 +1,9 @@
 from pathlib import Path
 
-from meme_generator import add_meme
 from PIL.Image import Image as IMG
 from pil_utils import BuildImage
+
+from meme_generator import add_meme
 
 img_dir = Path(__file__).parent / "images"
 

@@ -1,17 +1,18 @@
 import random
-from typing import List
 from pathlib import Path
+from typing import List
+
+from pil_utils import BuildImage
 from pydantic import Field
+
 from meme_generator import (
-    add_meme,
     MemeArgsModel,
     MemeArgsType,
     ParserArg,
     ParserOption,
+    add_meme,
 )
-from pil_utils import BuildImage
 from meme_generator.exception import MemeFeedback, TextOverLength
-
 
 img_dir = Path(__file__).parent / "images"
 
@@ -34,7 +35,7 @@ args_type = MemeArgsType(
 )
 
 
-def sick_delicate(images: List[BuildImage], texts, args: Model):
+def sick_delicate(images: list[BuildImage], texts, args: Model):
     total_num = 4
 
     if args.number == 0:

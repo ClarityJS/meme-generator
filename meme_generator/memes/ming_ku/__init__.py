@@ -1,20 +1,18 @@
 from pathlib import Path
 from typing import List
 
-from meme_generator import add_meme
 from PIL.Image import Image as IMG
 from pil_utils import BuildImage
+
+from meme_generator import add_meme
 
 img_dir = Path(__file__).parent / "images"
 
 
-def ming_ku(images: List[BuildImage], texts: List[str], args):
-
+def ming_ku(images: list[BuildImage], texts: list[str], args):
     user_loc = (63, 50)
 
-    user_head = (
-        images[0].convert("RGBA").resize((60, 60), keep_ratio=True).circle()
-    )
+    user_head = images[0].convert("RGBA").resize((60, 60), keep_ratio=True).circle()
 
     frame = BuildImage.open(img_dir / "0.png")
 

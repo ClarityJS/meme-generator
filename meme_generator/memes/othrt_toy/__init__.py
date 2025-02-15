@@ -1,7 +1,9 @@
 from pathlib import Path
-from meme_generator import add_meme
-from meme_generator.exception import TextOverLength, ImageNumberMismatch
+
 from pil_utils import BuildImage
+
+from meme_generator import add_meme
+from meme_generator.exception import ImageNumberMismatch, TextOverLength
 
 img_dir = Path(__file__).parent / "images"
 
@@ -17,10 +19,7 @@ def other_toy(images: list[BuildImage], texts: list[str], args):
             .rotate(-20)
         )
         user_head = (
-            images[1]
-            .convert("RGBA")
-            .resize((220, 220), keep_ratio=True)
-            .circle()
+            images[1].convert("RGBA").resize((220, 220), keep_ratio=True).circle()
         )
     except ValueError:
         raise ImageNumberMismatch(images)

@@ -1,6 +1,8 @@
 from pathlib import Path
+
 from pil_utils import BuildImage
 from pydantic import Field
+
 from meme_generator import (
     MemeArgsModel,
     MemeArgsType,

@@ -1,15 +1,16 @@
 from pathlib import Path
 from typing import List
 
-from meme_generator import add_meme
-from meme_generator.utils import save_gif
 from PIL.Image import Image as IMG
 from pil_utils import BuildImage
+
+from meme_generator import add_meme
+from meme_generator.utils import save_gif
 
 img_dir = Path(__file__).parent / "images"
 
 
-def fast_do(images: List[BuildImage], texts, args):
+def fast_do(images: list[BuildImage], texts, args):
     self_locs = [(116, -8), (109, 3), (130, -10)]
     user_locs = [(2, 177), (12, 172), (6, 158)]
     self_head = (
@@ -26,7 +27,7 @@ def fast_do(images: List[BuildImage], texts, args):
         .circle()
         .rotate(90)
     )
-    frames: List[IMG] = []
+    frames: list[IMG] = []
     for i in range(3):
         frame = BuildImage.open(img_dir / f"{i}.png")
         frame.paste(user_head, user_locs[i], alpha=True)

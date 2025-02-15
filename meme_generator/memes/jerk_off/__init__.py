@@ -1,13 +1,14 @@
 from datetime import datetime
 from pathlib import Path
 
+from pil_utils import BuildImage
+
 from meme_generator import add_meme
 from meme_generator.utils import (
     FrameAlignPolicy,
     Maker,
     make_gif_or_combined_gif,
 )
-from pil_utils import BuildImage
 
 img_dir = Path(__file__).parent / "images"
 
@@ -24,22 +25,14 @@ def jerk_off(images: list[BuildImage], texts, args):
 
     def maker(i: int) -> Maker:
         def make(imgs: list[BuildImage]) -> BuildImage:
-            frame = (
-                imgs[0]
-                .convert("RGBA")
-                .resize((frame_w, frame_h), keep_ratio=True)
-            )
+            frame = imgs[0].convert("RGBA").resize((frame_w, frame_h), keep_ratio=True)
             jerk = BuildImage.open(img_dir / f"{i}.png")
-            frame.paste(
-                jerk, ((frame_w - jerk_w) // 2, frame_h - jerk_h), alpha=True
-            )
+            frame.paste(jerk, ((frame_w - jerk_w) // 2, frame_h - jerk_h), alpha=True)
             return frame
 
         return make
 
-    return make_gif_or_combined_gif(
-        images, maker, 8, 0.1, FrameAlignPolicy.extend_loop
-    )
+    return make_gif_or_combined_gif(images, maker, 8, 0.1, FrameAlignPolicy.extend_loop)
 
 
 add_meme(
