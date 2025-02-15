@@ -6,6 +6,9 @@ on:
       - "main"
     tags:
       - "v*"
+  workflow_run:
+    workflows: ["同步更新"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
