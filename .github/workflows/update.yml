@@ -1,74 +1,76 @@
-name: Update resource_list.json & Wiki
+name: 更新 resource_list.json & Wiki
 
 on:
   push:
     branches:
-      - "main"
+      - "main" 
     paths:
       - "meme_generator/memes/**"
-  workflow_dispatch:
+  workflow_dispatch:  
 
 permissions:
   contents: write
 
 jobs:
-  update-resource-list:
+  update_resource_list:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 检出仓库代码
+        uses: actions/checkout@v4
 
-      - name: Setup python
+      - name: 设置 Python 环境
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Update resource_list.json
+      - name: 更新 resource_list.json 文件
         run: python tools/update_resource_list.py
 
-      - name: Commit & Push changes
+      - name: 提交并推送更改
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "Update resource_list.json"
+          message: "更新 resource_list.json"
           branch: "main"
 
-  update-wiki:
+  update_wiki:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 检出仓库代码
+        uses: actions/checkout@v4
 
-      - name: Checkout wiki repo
+      - name: 检出 Wiki 仓库
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.repository }}.wiki
-          path: wiki
+          repository: ${{ github.repository }}.wiki 
+          path: wiki 
 
-      - name: Setup python
+      - name: 设置 Python 环境
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Setup Poetry
+      - name: 安装 Poetry
         uses: Gr1N/setup-poetry@v9
 
-      - name: Install dependencies
+      - name: 安装依赖
         run: poetry install
 
-      - name: Install fonts
+      - name: 安装字体
         run: |
           sudo apt install fonts-noto-color-emoji libgl1 libglx-mesa0 libgl1-mesa-dri
           sudo mkdir /usr/share/fonts/myfonts
           sudo cp resources/fonts/* /usr/share/fonts/myfonts/
           fc-cache -fv
 
-      - name: Update memes.md
+      - name: 更新 memes.md 文件
         run: poetry run python wiki/update_meme_list.py
 
-      - name: Commit & Push changes
+      - name: 提交并推送 Wiki 更新
         uses: actions-js/push@master
         with:
           directory: "wiki"
           repository: ${{ github.repository }}.wiki
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "update meme list"
+          message: "更新 Meme 列表"
           branch: "master"

@@ -1,14 +1,16 @@
-ci:
-  autofix_commit_msg: "style: auto fix by pre-commit hooks"
-  autofix_prs: true
-  autoupdate_branch: main
-  autoupdate_schedule: quarterly
-  autoupdate_commit_msg: "chore: auto update by pre-commit hooks"
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.6
-    hooks:
-      - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
-        stages: [pre-commit]
-      - id: ruff-format
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.9.6
+  hooks:
+    - id: ruff
+      args: [ --fix ]
+      stages: [pre-commit]
+      types: [file]
+    - id: ruff-format
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+  autofix_prs: true
+  autofix_push: false
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
