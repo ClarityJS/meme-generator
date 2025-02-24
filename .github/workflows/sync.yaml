@@ -5,6 +5,9 @@
 #   workflow_run:
 #     workflows: ["构建并推送镜像"]
 #     types: [completed]
+#   push:
+#     branches:
+#       - "main"
 #   schedule:
 #     - cron: "0 18 * * *"
 

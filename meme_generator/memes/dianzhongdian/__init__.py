@@ -10,7 +10,7 @@ from meme_generator.utils import translate
 def dianzhongdian(images: list[BuildImage], texts: list[str], args):
     if len(texts) == 1:
         text = texts[0]
-        trans = translate(text, lang_to="jp")
+        trans = translate(text, lang_to="ja")
     else:
         text = texts[0]
         trans = texts[1]

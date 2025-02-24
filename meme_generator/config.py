@@ -32,9 +32,10 @@ class GifConfig(BaseModel):
     gif_max_frames: int = 100
 
 
-class TranslatorConfig(BaseModel):
-    baidu_trans_appid: str = ""
-    baidu_trans_apikey: str = ""
+# 已由大佬提供翻译相关技术，无需配置了
+# class TranslatorConfig(BaseModel):
+#     baidu_trans_appid: str = ""
+#     baidu_trans_apikey: str = ""
 
 
 class ServerConfig(BaseModel):
@@ -50,7 +51,7 @@ class Config(BaseModel):
     meme: MemeConfig = MemeConfig()
     resource: ResourceConfig = ResourceConfig()
     gif: GifConfig = GifConfig()
-    translate: TranslatorConfig = TranslatorConfig()
+    # translate: TranslatorConfig = TranslatorConfig()
     server: ServerConfig = ServerConfig()
     log: LogConfig = LogConfig()
 

@@ -1,6 +1,8 @@
 import asyncio
+import base64
 import hashlib
 import inspect
+import json
 import math
 import random
 import time
@@ -13,6 +15,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Literal, TypeVar
 
 import httpx
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
 from PIL.Image import Image as IMG
 from pil_utils import BuildImage, Text2Image
 from pil_utils.typing import ColorType
@@ -340,28 +344,97 @@ def make_gif_or_combined_gif(
     return save_gif(frames, duration)
 
 
+# 原代码的翻译函数
+
+# def translate(text: str, lang_from: str = "auto", lang_to: str = "zh") -> str:
+#     appid = meme_config.translate.baidu_trans_appid
+#     apikey = meme_config.translate.baidu_trans_apikey
+#     if not appid or not apikey:
+#         raise MemeFeedback(
+#             '"baidu_trans_appid" 或 "baidu_trans_apikey" 未设置，请检查配置文件！'
+#         )
+#     salt = str(round(time.time() * 1000))
+#     sign_raw = appid + text + salt + apikey
+#     sign = hashlib.md5(sign_raw.encode("utf8")).hexdigest()
+#     params = {
+#         "q": text,
+#         "from": lang_from,
+#         "to": lang_to,
+#         "appid": appid,
+#         "salt": salt,
+#         "sign": sign,
+#     }
+#     url = "https://fanyi-api.baidu.com/api/trans/vip/translate"
+#     resp = httpx.get(url, params=params)
+#     result = resp.json()
+#     return result["trans_result"][0]["dst"]
+
+
 def translate(text: str, lang_from: str = "auto", lang_to: str = "zh") -> str:
-    appid = meme_config.translate.baidu_trans_appid
-    apikey = meme_config.translate.baidu_trans_apikey
-    if not appid or not apikey:
-        raise MemeFeedback(
-            '"baidu_trans_appid" 或 "baidu_trans_apikey" 未设置，请检查配置文件！'
-        )
-    salt = str(round(time.time() * 1000))
-    sign_raw = appid + text + salt + apikey
-    sign = hashlib.md5(sign_raw.encode("utf8")).hexdigest()
-    params = {
-        "q": text,
+    """有道翻译API"""
+
+    decode_key = "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl"
+    decode_iv = "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4"
+
+    client = "fanyideskweb"
+    product = "webfanyi"
+    secret_key = "Vy4EQ1uwPkUoqvcP1nIu6WiAjxFeA3Yq"
+
+    mystic_time = int(time.time() * 1000)
+    sign_string = (
+        f"client={client}&mysticTime={mystic_time}&product={product}&key={secret_key}"
+    )
+    sign = hashlib.md5(sign_string.encode()).hexdigest()
+
+    url = "https://dict.youdao.com/webtranslate"
+    headers = {
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Pragma": "no-cache",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Referer": "https://fanyi.youdao.com/",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+    }
+
+    data = {
+        "i": text,
         "from": lang_from,
         "to": lang_to,
-        "appid": appid,
-        "salt": salt,
+        "useTerm": "false",
+        "domain": "0",
+        "dictResult": "true",
+        "keyid": "webfanyi",
         "sign": sign,
+        "client": client,
+        "product": product,
+        "appVersion": "1.0.0",
+        "vendor": "web",
     }
-    url = "https://fanyi-api.baidu.com/api/trans/vip/translate"
-    resp = httpx.get(url, params=params)
-    result = resp.json()
-    return result["trans_result"][0]["dst"]
+
+    try:
+        with httpx.Client() as client:
+            response = client.post(url, headers=headers, data=data)
+            encrypted_data = response.text.strip()
+        encrypted_data = encrypted_data.replace("-", "+").replace("_", "/")
+        missing_padding = 4 - (len(encrypted_data) % 4)
+        if missing_padding:
+            encrypted_data += "=" * missing_padding
+        decoded_data = base64.b64decode(encrypted_data)
+        key_buffer = hashlib.md5(decode_key.encode()).digest()[:16]
+        iv_buffer = hashlib.md5(decode_iv.encode()).digest()[:16]
+        cipher = AES.new(key_buffer, AES.MODE_CBC, iv_buffer)
+        decrypted_data = cipher.decrypt(decoded_data)
+        decrypted_text = unpad(decrypted_data, AES.block_size, style="pkcs7").decode(
+            "utf-8"
+        )
+
+        result = json.loads(decrypted_text)
+        return result["translateResult"][0]["tgt"]
+
+    except Exception:
+        raise MemeFeedback("翻译失败")
 
 
 def random_text() -> str:
