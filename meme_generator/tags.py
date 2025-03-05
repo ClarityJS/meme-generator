@@ -18,6 +18,7 @@ class MemeTags:
     captain = {"休伯利安号", "舰长"} | honkai3
     griseo = {"格蕾修"} | honkai3
     firefly = {"流萤"} | star_rail
+    elysia = {"爱莉", "爱莉希雅"} | star_rail
 
     # 蔚蓝档案
     blue_archive = {"蔚蓝档案", "碧蓝档案"}
