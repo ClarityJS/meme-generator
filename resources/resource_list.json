@@ -2460,6 +2460,38 @@
     "hash": "3248f754830433778ae06df6ba2735d8"
   },
   {
+    "path": "elysia_holdsign/images/01.png",
+    "hash": "1a32f03f1bff240ec52c6a8aab68ee2a"
+  },
+  {
+    "path": "elysia_holdsign/images/02.png",
+    "hash": "b45c3674ef4963da0ce7a874128e3959"
+  },
+  {
+    "path": "elysia_holdsign/images/03.png",
+    "hash": "53434584cf7afbc14f507c33c3b9a7a2"
+  },
+  {
+    "path": "elysia_holdsign/images/04.png",
+    "hash": "d5c3e673df35ffcea6d2eff34be7bdab"
+  },
+  {
+    "path": "elysia_holdsign/images/05.png",
+    "hash": "f3f236e0e3aba3db658e873c491cb908"
+  },
+  {
+    "path": "elysia_holdsign/images/06.png",
+    "hash": "2593d768953603527184e2ea374128fb"
+  },
+  {
+    "path": "elysia_holdsign/images/07.png",
+    "hash": "2c51fd608183c4fbc7c127551a188ce3"
+  },
+  {
+    "path": "elysia_holdsign/images/08.png",
+    "hash": "3f2d4151e2a1ad4e8859058e380abecd"
+  },
+  {
     "path": "empathy/images/0.png",
     "hash": "deedc9320ce89b7d54ee544357922369"
   },
@@ -8922,6 +8954,10 @@
   {
     "path": "read_book/images/0.png",
     "hash": "c0bfd676ec62f8ef1a2e2c98244681ba"
+  },
+  {
+    "path": "remote_control/images/0.png",
+    "hash": "94b68bbceaed75ca70a974069fc6b9a2"
   },
   {
     "path": "repeat/images/0.jpg",
