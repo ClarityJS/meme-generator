@@ -1,11 +1,9 @@
 import asyncio
-import base64
-import hashlib
 import inspect
-import json
 import math
 import random
 import time
+import uuid
 from collections.abc import Coroutine
 from dataclasses import dataclass, field
 from enum import Enum
@@ -15,8 +13,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Literal, TypeVar
 
 import httpx
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import unpad
 from PIL.Image import Image as IMG
 from pil_utils import BuildImage, Text2Image
 from pil_utils.typing import ColorType
@@ -371,67 +367,53 @@ def make_gif_or_combined_gif(
 
 
 def translate(text: str, lang_from: str = "auto", lang_to: str = "zh") -> str:
-    """有道翻译API"""
+    """腾讯 Transmart 翻译 API"""
 
-    decode_key = "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl"
-    decode_iv = "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4"
+    client_uuid = str(uuid.uuid4())
+    timestamp = int(time.time() * 1000)
 
-    client = "fanyideskweb"
-    product = "webfanyi"
-    secret_key = "Vy4EQ1uwPkUoqvcP1nIu6WiAjxFeA3Yq"
+    url = "https://transmart.qq.com/api/imt"
 
-    mystic_time = int(time.time() * 1000)
-    sign_string = (
-        f"client={client}&mysticTime={mystic_time}&product={product}&key={secret_key}"
-    )
-    sign = hashlib.md5(sign_string.encode()).hexdigest()
-
-    url = "https://dict.youdao.com/webtranslate"
     headers = {
         "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+        "Accept-Language": "zh-CN,zh;q=0.9",
         "Cache-Control": "no-cache",
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
         "Pragma": "no-cache",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Referer": "https://fanyi.youdao.com/",
+        "Priority": "u=1, i",
+        "Sec-Ch-Ua": '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133")',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Linux"',
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "X-Requested-With": "XMLHttpRequest",
+        "Cookie": f"TSMT_CLIENT_KEY=browser-chrome-133.0.0-Linux-{client_uuid}-{timestamp}",
+        "Referer": "https://transmart.qq.com/zh-CN/index",
         "Referrer-Policy": "strict-origin-when-cross-origin",
     }
 
-    data = {
-        "i": text,
-        "from": lang_from,
-        "to": lang_to,
-        "useTerm": "false",
-        "domain": "0",
-        "dictResult": "true",
-        "keyid": "webfanyi",
-        "sign": sign,
-        "client": client,
-        "product": product,
-        "appVersion": "1.0.0",
-        "vendor": "web",
+    payload = {
+        "header": {
+            "fn": "auto_translation",
+            "session": "",
+            "client_key": f"browser-chrome-133.0.0-Linux-{client_uuid}-{timestamp}",
+            "user": "",
+        },
+        "type": "plain",
+        "model_category": "normal",
+        "text_domain": "",
+        "source": {"lang": lang_from, "text_list": [text]},
+        "target": {"lang": lang_to},
     }
 
     try:
-        with httpx.Client() as client:
-            response = client.post(url, headers=headers, data=data)
-            encrypted_data = response.text.strip()
-        encrypted_data = encrypted_data.replace("-", "+").replace("_", "/")
-        missing_padding = 4 - (len(encrypted_data) % 4)
-        if missing_padding:
-            encrypted_data += "=" * missing_padding
-        decoded_data = base64.b64decode(encrypted_data)
-        key_buffer = hashlib.md5(decode_key.encode()).digest()[:16]
-        iv_buffer = hashlib.md5(decode_iv.encode()).digest()[:16]
-        cipher = AES.new(key_buffer, AES.MODE_CBC, iv_buffer)
-        decrypted_data = cipher.decrypt(decoded_data)
-        decrypted_text = unpad(decrypted_data, AES.block_size, style="pkcs7").decode(
-            "utf-8"
-        )
-
-        result = json.loads(decrypted_text)
-        return result["translateResult"][0]["tgt"]
+        with httpx.Client(timeout=5) as client:
+            response = client.post(url, headers=headers, json=payload)
+            response.raise_for_status()
+            data = response.json()
+            result = data["auto_translation"][0]
+            return result
 
     except Exception:
         raise MemeFeedback("翻译失败")
