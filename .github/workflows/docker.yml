@@ -59,9 +59,6 @@ jobs:
       - name: 设置 Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-        with:
-          key: docker-buildx-cache
-
       - name: 构建并推送 Docker 镜像
         uses: docker/build-push-action@v5
         with:
