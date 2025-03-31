@@ -10,15 +10,13 @@ jobs:
   sever:
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-      
       - name: 同步更新
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ join(fromJson(secrets.SSH_HOSTS), ',') }}  
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          sync: true
           script: |
             cd /opt/meme/
             docker compose up --pull always -d

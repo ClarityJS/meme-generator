@@ -44,18 +44,6 @@ pythonPlatform = "All"
 typeCheckingMode = "basic"
 defineConstant = { PYDANTIC_V2 = true }
 
-[tool.ruff]
-line-length = 88
-target-version = "py39"
-
-[tool.ruff.lint]
-select = ["E", "W", "F", "UP", "C", "T", "PYI", "PT", "Q", "I"]
-ignore = ["E402", "E501", "E711", "C901", "UP037"]
-
-
-[tool.ruff.lint.isort]
-detect-same-package = true
-
 [build-system]
 requires = ["poetry-core>=1.6.0"]
 build-backend = "poetry.core.masonry.api"
