@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/ClarityJS/meme-generator/compare/v0.2.0...v0.3.0) (2025-03-31)
+
+
+### ✨ 新功能
+
+* **meme_generator:** 新增多个 meme 模板 ([bdc075f](https://github.com/ClarityJS/meme-generator/commit/bdc075fd3d7d514ab18dbfc63f78f5e27c93cfb6))
+
+
+### 📦️ 构建系统
+
+* **docker:** 移除 Docker Buildx 缓存设置 ([f3215fd](https://github.com/ClarityJS/meme-generator/commit/f3215fdf13b2376adaee5240fb7fe31cb79df516))
+
 ## [0.2.0](https://github.com/ClarityJS/meme-generator/compare/v0.1.1...v0.2.0) (2025-03-31)
 
 
