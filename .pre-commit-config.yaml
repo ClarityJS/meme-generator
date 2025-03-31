@@ -2,7 +2,6 @@ ci:
   autofix_commit_msg: |
     [pre-commit.ci] auto fixes from pre-commit hooks
   autofix_prs: true
-  autofix_push: true
   autoupdate_branch: main
   autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
 repos:
